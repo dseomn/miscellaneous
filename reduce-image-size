@@ -31,6 +31,10 @@ shift $(($OPTIND - 1)) || fatal "Error parsing arguments."
 test -n "$size" -o -n "$quality" || fatal "Nothing to do."
 test "$#" -gt 0 || fatal "No images given."
 
+require_dot_fn() {
+  basename "$1" | grep -q '\.' || fatal "Filename does not have a '.': $1"
+}
+
 for file in "$@"; do
   if test -L "$file"; then
     orig_image="$(try readlink -f "$file")" || exit 1
@@ -44,6 +48,7 @@ for file in "$@"; do
   tag="${size}"
   test -n "$quality" && tag="${tag}q${quality}"
 
+  require_dot_fn "$orig_image"
   new_image="${orig_image%.*}-${tag}.${orig_image##*.}"
 
   try convert \
@@ -53,6 +58,8 @@ for file in "$@"; do
       "$new_image"
 
   if test -n "$orig_link"; then
+    require_dot_fn "$orig_link"
+    require_dot_fn "$orig_link_to"
     new_link="${orig_link%.*}-${tag}.${orig_link##*.}"
     new_link_to="${orig_link_to%.*}-${tag}.${orig_link_to##*.}"
     try ln -s "$new_link_to" "$new_link"
