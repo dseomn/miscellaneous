@@ -1,0 +1,50 @@
+#!/bin/sh
+
+# Record audio from a USB turntable (ALSA, hw:1,0), playing over the speakers
+# and saving to the given file. This script prioritizes getting a good
+# recording saved to the file, at the expense of latency.
+
+log() { printf %s\\n "$*"; }
+error() { log "ERROR: $*" >&2; }
+fatal() { error "$*"; exit 1; }
+try() { "$@" || fatal "Command failed: $*"; }
+
+
+file="$1"
+shift || fatal "need file"
+
+
+# Truncate the file, to avoid race conditions between recording and playing.
+: > "$file" || fatal "unable to truncate ${file}"
+
+# Record to the file, in the background
+try sox \
+    --multi-threaded \
+    --buffer 8192 \
+    -S \
+    -b 16 -r 48000 -c 2 -t alsa hw:1,0 \
+    "$file" &
+record_pid="$!"
+
+# The rest of this script will quit gracefully once recording ends, so ignore
+# interrupts.
+trap '' INT
+
+# Wait for there to be some data in $file.
+tail \
+    --quiet \
+    --follow --pid="$record_pid" --sleep-interval=0.01 \
+    --bytes=+0 \
+    "$file" |
+  head --bytes=65536 > /dev/null
+
+# Play audio as it arrives.
+try sox -q "$file" -d
+
+# Test for early termination of playing, most likely due to too low of a value
+# passed to `head --bytes` above.
+sleep 1
+kill -s 0 "$record_pid" > /dev/null 2>&1 &&
+  error "Playing stopped while recording still runnning."
+
+wait "$record_pid" || exit 1
