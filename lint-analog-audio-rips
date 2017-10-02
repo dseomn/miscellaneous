@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Check a directory of audio rips from analog sources, for issues indicating
+# that the rip was never finished. (This is probably too specific to my own
+# workflow to be usable elsewhere.)
+
+log() { printf %s\\n "$*"; }
+error() { log "ERROR: $*" >&2; }
+fatal() { error "$*"; exit 1; }
+try() { "$@" || fatal "Command failed: $*"; }
+
+try shopt -s dotglob
+
+RELATIVE_SELF="$(try realpath --relative-base=. --no-symlinks "$0")" || exit 1
+
+for f in *; do
+  if test -d "$f"; then
+    test -f "$f/Label Track.txt" || log "Missing label track: $f"
+  elif test "$f" != "$RELATIVE_SELF"; then
+    log "Non-directory: $f"
+  fi
+done
