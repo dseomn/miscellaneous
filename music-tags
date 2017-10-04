@@ -1,0 +1,86 @@
+# This is a list of custom tags I use with my music collection. Some are tagged
+# manually; some are applied automatically from other sources.
+
+added/YYYY/MM/DD # when it was added to my collection
+context/advertisement
+context/anthem
+context/contest
+context/contest/eurovision-song-contest
+context/demoscene
+context/hidden-track
+context/hidden-track/pregap
+context/hidden-track/separated-by-silence
+context/hidden-track/unlisted
+context/soundtrack
+dance/by-extra/calls # the recording has calls (e.g., for a contra or square)
+dance/by-extra/long-intro # there's a lot of audio (potentially including silence) before the dance starts
+dance/by-extra/long-outro # there's a lot of audio (potentially including silence) after the dance ends
+dance/by-formation/circle # groups (individual/couple/triad) are arranged in a circle. e.g., La Bastrangue, many waltz mixers
+dance/by-formation/line # groups arranged in a line
+dance/by-formation/none # groups dance wherever, e.g., waltz or swing
+dance/by-formation/set # groups arranged in a set. e.g., contra, square, quadrille
+dance/by-grouping/couple # 1 partner is required to join the dance
+dance/by-grouping/individual # people join the dance individually
+dance/by-grouping/mixer # partners change throughout the dance
+dance/by-grouping/triad # 2 partners required to join the dance
+dance/by-meter/duple
+dance/by-meter/other
+dance/by-meter/triple
+dance/by-name/branle
+dance/by-name/bulgar
+dance/by-name/cancan
+dance/by-name/contra
+dance/by-name/csárdás
+dance/by-name/gangar
+dance/by-name/gangar/telegangar
+dance/by-name/hambo
+dance/by-name/hora
+dance/by-name/kolo
+dance/by-name/ländler
+dance/by-name/mambo
+dance/by-name/maxixe
+dance/by-name/mazurka
+dance/by-name/merengue
+dance/by-name/polka
+dance/by-name/polska
+dance/by-name/polska/bodapolska
+dance/by-name/polska/bondpolska
+dance/by-name/polska/finnskogspols
+dance/by-name/polska/rørospols
+dance/by-name/polska/slängpolska
+dance/by-name/polska/åtabaks
+dance/by-name/schottis
+dance/by-name/seis
+dance/by-name/snoa
+dance/by-name/springar
+dance/by-name/springar/telespringar
+dance/by-name/springar/valdresspringar
+dance/by-name/swing
+dance/by-name/tango
+dance/by-name/tarantella
+dance/by-name/waltz
+dance/by-name/zweifacher
+dance/by-name/zydeco
+dance/by-speed/1-very-slow
+dance/by-speed/2-slow
+dance/by-speed/3-moderate
+dance/by-speed/4-fast
+dance/by-speed/5-very-fast
+dance/by-style/dance-dance-revolution
+dance/by-style/folk/armenian
+dance/by-style/folk/balkan
+dance/by-style/folk/greek
+dance/by-style/folk/israeli
+dance/by-style/folk/macedonian
+dance/by-style/folk/scandinavian
+dance/by-style/folk/turkish
+meta/missing-added # missing an added/YYYY/MM/DD tag
+meta/missing-replaygain
+mood/anxious
+mood/hauntingly-beautiful
+playback/in-sequence-only # play the recording, but only in a sequence (e.g., an album), never alone. e.g., for "Intro" tracks
+playback/manual-only # never automatically play the recording
+remark/catchy
+remark/humorous
+remark/nostalgic
+remark/well-known
