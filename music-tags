@@ -11,6 +11,7 @@ context/hidden-track
 context/hidden-track/pregap
 context/hidden-track/separated-by-silence
 context/hidden-track/unlisted
+context/sound-effect
 context/soundtrack
 dance/by-extra/calls # the recording has calls (e.g., for a contra or square)
 dance/by-extra/long-intro # there's a lot of audio (potentially including silence) before the dance starts
