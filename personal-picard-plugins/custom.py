@@ -37,6 +37,7 @@ register_track_metadata_processor(
 def genre_from_instruments(tagger, metadata, *args):
     genres = []
     for instrument in metadata.getall('~instrument'):
+        instrument = instrument.replace('/', '_')
         if 'vocals' in instrument:
             genres.append('performance/vocal')
             if instrument != 'vocals':
