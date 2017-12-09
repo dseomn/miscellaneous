@@ -28,26 +28,21 @@ def iterate_instruments(instrument_list):
             yield instrument
 
 def strip_instrument_prefixes(instrument):
-    instrument_prefixes = [
-        'additional ',
-        'guest ',
-        'solo ',
-        ]
+    instrument_prefixes = {
+        'additional',
+        'guest',
+        'solo',
+        }
 
     remaining = instrument
     while remaining:
-        removed_prefix = False
-        for prefix in instrument_prefixes:
-            if remaining.startswith(prefix):
-                remaining = remaining[len(prefix):]
-                removed_prefix = True
-        if not removed_prefix:
-            break
-    if not remaining:
-        raise ValueError(
-            'Instrument is empty after stripping prefixes: ' + instrument)
+        prefix, sep, remaining = remaining.partition(' ')
+        if prefix not in instrument_prefixes:
+            return ''.join((prefix, sep, remaining))
 
-    return remaining
+    # At this point, the instrument was all prefixes. This can happen with a
+    # relationship like "guest performer" which has no instrument.
+    return None
 
 def add_instruments(tagger, metadata, *args):
     key_prefix = 'performer:'
@@ -57,9 +52,9 @@ def add_instruments(tagger, metadata, *args):
             continue
 
         for instrument in iterate_instruments(key[len(key_prefix):]):
-            metadata.add_unique(
-                '~instrument',
-                strip_instrument_prefixes(instrument))
+            instrument = strip_instrument_prefixes(instrument)
+            if instrument:
+                metadata.add_unique('~instrument', instrument)
 
 register_track_metadata_processor(
     add_instruments,
