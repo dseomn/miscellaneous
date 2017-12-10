@@ -13,7 +13,7 @@ def genre_normalize(tagger, metadata, *args):
         return
 
     metadata['genre'] = sorted({
-        genre.lower().replace(' ', '-')
+        genre.lower().replace(' ', '-').replace('\'', '')
         for genre in metadata.getall('genre')})
 
 register_track_metadata_processor(
