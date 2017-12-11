@@ -4,6 +4,8 @@ PLUGIN_VERSION = '0.1'
 PLUGIN_API_VERSIONS = ['1.3.0']
 
 
+import slugify
+
 from picard.metadata import register_track_metadata_processor
 from picard.plugin import PluginPriority
 
@@ -13,7 +15,7 @@ def genre_normalize(tagger, metadata, *args):
         return
 
     metadata['genre'] = sorted({
-        genre.lower().replace(' ', '-').replace('\'', '')
+        slugify.slugify(genre, ok=slugify.SLUG_OK + '/')
         for genre in metadata.getall('genre')})
 
 register_track_metadata_processor(
