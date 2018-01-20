@@ -122,6 +122,10 @@ dance/by-style/folk/ukrainian
 meta/missing-added # missing an added/YYYY/MM/DD tag
 meta/missing-replaygain
 mood/hauntingly-beautiful
+performance/instrument
+performance/instrument/X # X is a type of instrument
+performance/vocal
+performance/vocal/X # X is a type of vocals
 playback/in-sequence-only # play the recording, but only in a sequence (e.g., an album), never alone. e.g., for "Intro" tracks
 playback/manual-only # never automatically play the recording
 remark/catchy
