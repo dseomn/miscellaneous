@@ -121,7 +121,6 @@ dance/by-style/folk/turkish
 dance/by-style/folk/ukrainian
 meta/missing-added # missing an added/YYYY/MM/DD tag
 meta/missing-replaygain
-mood/anxious
 mood/hauntingly-beautiful
 playback/in-sequence-only # play the recording, but only in a sequence (e.g., an album), never alone. e.g., for "Intro" tracks
 playback/manual-only # never automatically play the recording
