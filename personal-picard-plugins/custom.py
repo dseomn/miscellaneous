@@ -65,11 +65,83 @@ register_track_metadata_processor(
     )
 
 
+def genre_from_media(tagger, metadata, *args):
+    genres_by_media = {
+        '7" Vinyl': [
+            'media/phonograph',
+            'media/phonograph/by-material/vinyl',
+            'media/phonograph/by-shape/disc',
+            'media/phonograph/by-size/7in',
+            ],
+        '10" Vinyl': [
+            'media/phonograph',
+            'media/phonograph/by-material/vinyl',
+            'media/phonograph/by-shape/disc',
+            'media/phonograph/by-size/10in',
+            ],
+        '12" Vinyl': [
+            'media/phonograph',
+            'media/phonograph/by-material/vinyl',
+            'media/phonograph/by-shape/disc',
+            'media/phonograph/by-size/12in',
+            ],
+
+        'Cassette': [
+            'media/tape',
+            'media/tape/cassette',
+            ],
+
+        'CD': [
+            'media/optical',
+            'media/optical/cd',
+            ],
+        'CD-R': [
+            'media/optical',
+            'media/optical/cd',
+            'media/optical/cd/cd-r',
+            ],
+        'Enhanced CD': [
+            'media/optical',
+            'media/optical/cd',
+            'media/optical/cd/enhanced-cd',
+            ],
+        'HDCD': [
+            'media/optical',
+            'media/optical/cd',
+            'media/optical/cd/hdcd',
+            ],
+
+        'Digital Media': [
+            'media/digital',
+            ],
+        }
+
+    for media in metadata.getall('media'):
+        if media in genres_by_media:
+            for genre in genres_by_media[media]:
+                metadata.add_unique('genre', genre)
+        else:
+            raise ValueError('No genres for media: ' + media)
+
+register_track_metadata_processor(
+    genre_from_media,
+    )
+
+
 def genre_meta(tagger, metadata, *args):
     genres = metadata.getall('genre')
 
     if not any((genre.lower().startswith('added/') for genre in genres)):
         genres.append('meta/missing-added')
+
+    if not any((genre.lower().startswith('media/') for genre in genres)):
+        genres.append('meta/missing-media')
+
+    if any((genre.lower() == 'media/phonograph' for genre in genres)):
+        if not any((genre.lower().startswith('media/phonograph/by-size/') for genre in genres)):
+            genres.append('meta/missing-phonograph-size')
+        if not any((genre.lower().startswith('media/phonograph/by-speed/') for genre in genres)):
+            genres.append('meta/missing-phonograph-speed')
 
     metadata['genre'] = genres
 

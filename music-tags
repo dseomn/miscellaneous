@@ -122,6 +122,24 @@ dance/by-style/folk/swiss
 dance/by-style/folk/turkish
 dance/by-style/folk/ukrainian
 dance/by-style/play-party
+media/digital # i.e., no physical media, so CDDA would not be included
+media/optical
+media/optical/cd
+media/optical/cd/cd-r
+media/optical/cd/enhanced-cd
+media/optical/cd/hdcd
+media/phonograph
+media/phonograph/by-material/shellac
+media/phonograph/by-material/vinyl
+media/phonograph/by-shape/disc
+media/phonograph/by-size/10in
+media/phonograph/by-size/12in
+media/phonograph/by-size/7in
+media/phonograph/by-speed/33rpm
+media/phonograph/by-speed/45rpm
+media/phonograph/by-speed/78rpm
+media/tape
+media/tape/cassette
 meta/missing-added # missing an added/YYYY/MM/DD tag
 meta/missing-replaygain
 mood/hauntingly-beautiful
