@@ -30,6 +30,8 @@ def genre_normalize_added(tagger, metadata, *args):
         genre_parts = genre.split('/')
         if len(genre_parts) >= 2 and genre_parts[0].lower() == 'added':
             genres[i] = '/'.join(genre_parts[:2])
+            if genre.lower() != 'added/unknown':
+                metadata.add_unique('dseomn_added', '-'.join(genre_parts[1:]))
 
 register_track_metadata_processor(
     genre_normalize_added,
