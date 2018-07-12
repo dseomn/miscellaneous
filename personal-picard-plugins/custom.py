@@ -69,6 +69,24 @@ register_track_metadata_processor(
 
 def genre_from_media(tagger, metadata, *args):
     genres_by_media = {
+        '7" Shellac': [
+            'media/phonograph',
+            'media/phonograph/by-material/shellac',
+            'media/phonograph/by-shape/disc',
+            'media/phonograph/by-size/7in',
+            ],
+        '10" Shellac': [
+            'media/phonograph',
+            'media/phonograph/by-material/shellac',
+            'media/phonograph/by-shape/disc',
+            'media/phonograph/by-size/10in',
+            ],
+        '12" Shellac': [
+            'media/phonograph',
+            'media/phonograph/by-material/shellac',
+            'media/phonograph/by-shape/disc',
+            'media/phonograph/by-size/12in',
+            ],
         '7" Vinyl': [
             'media/phonograph',
             'media/phonograph/by-material/vinyl',
