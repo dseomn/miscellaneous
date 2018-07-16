@@ -130,6 +130,20 @@ def genre_from_media(tagger, metadata, *args):
             'media/optical/cd',
             'media/optical/cd/hdcd',
             ],
+        'DVD': [
+            'media/optical',
+            'media/optical/dvd',
+            ],
+        'DVD-Video': [
+            'media/optical',
+            'media/optical/dvd',
+            'media/optical/dvd/dvd-video',
+            ],
+        'DVD-Audio': [
+            'media/optical',
+            'media/optical/dvd',
+            'media/optical/dvd/dvd-audio',
+            ],
 
         'Digital Media': [
             'media/digital',
