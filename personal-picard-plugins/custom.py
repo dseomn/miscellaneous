@@ -10,6 +10,62 @@ from picard.metadata import register_track_metadata_processor
 from picard.plugin import PluginPriority
 
 
+def genre_filter(tagger, metadata, *args):
+    def parse_track_num(track_num):
+        medium, sep, track = track_num.partition('.')
+        try:
+            medium = int(medium)
+            track = int(track) if track else None
+        except ValueError:
+            raise ValueError('Invalid medium/track identifer: ' + track_num)
+        return medium, track
+
+    def parse_extent(extent):
+        for track_range in extent.split('+'):
+            first, sep, last = track_range.partition('-')
+            if not last:
+                last = first
+
+            yield parse_track_num(first), parse_track_num(last)
+
+    this_medium = int(metadata['discnumber']) if 'discnumber' in metadata else None
+    this_track = int(metadata['tracknumber']) if 'tracknumber' in metadata else None
+
+    def gte_first(first):
+        if this_medium == first[0]:
+            return first[1] is None or this_track >= first[1]
+        else:
+            return this_medium > first[0]
+
+    def lte_last(last):
+        if this_medium == last[0]:
+            return last[1] is None or this_track <= last[1]
+        else:
+            return this_medium < last[0]
+
+    filtered_genres = []
+    for genre in metadata.getall('genre'):
+        genre, sep, extent = genre.partition('@')
+        if sep and extent:
+            if this_medium is None or this_track is None:
+                raise ValueError('Cannot filter genre without medium and track info.')
+            for first, last in parse_extent(extent):
+                if gte_first(first) and lte_last(last):
+                    # The genre matches the extent, so add it.
+                    filtered_genres.append(genre)
+                    break
+        elif sep or extent:
+            raise ValueError('Invalid genre: ' + ''.join((genre, sep, extent)))
+        else:
+            # No filter, so the genre applies to everything.
+            filtered_genres.append(genre)
+    metadata['genre'] = filtered_genres
+
+register_track_metadata_processor(
+    genre_filter,
+    priority=PluginPriority.HIGH,
+    )
+
 def genre_normalize(tagger, metadata, *args):
     if 'genre' not in metadata:
         return

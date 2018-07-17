@@ -1,5 +1,10 @@
 # This is a list of custom tags I use with my music collection. Some are tagged
 # manually; some are applied automatically from other sources.
+#
+# Release-level tags can optionally end with a medium and track list, to limit
+# the tag to apply to only some tracks on the release. E.g., foo@1 (tag only
+# medium 1), foo@1.2-1.5 (tag only tracks 2-5 on medium 1), foo@1+5.2-5.9 (tag
+# only medium 1 and tracks 2-9 of medium 5).
 
 added/YYYY/MM/DD # when it was added to my collection
 context/advertisement
