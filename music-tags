@@ -138,6 +138,7 @@ media/optical/cd/hdcd
 media/optical/dvd
 media/optical/dvd/dvd-audio
 media/optical/dvd/dvd-video
+media/other
 media/phonograph
 media/phonograph/by-material/shellac
 media/phonograph/by-material/vinyl
