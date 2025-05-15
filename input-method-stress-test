@@ -1,0 +1,130 @@
+#!/usr/bin/env python3
+
+# Copyright 2025 David Mandelberg
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+"""Stress tests an input method.
+
+At various points with different input methods, I've noticed dropped keystrokes
+or reordered text. This tries to find those.
+
+https://github.com/mike-fabian/ibus-typing-booster/issues/732
+"""
+
+import argparse
+import sys
+import time
+
+import evdev
+
+_AMPERSAND = (evdev.ecodes.KEY_LEFTSHIFT, evdev.ecodes.KEY_7)
+
+# Keys and the strings they should produce. Try to avoid re-using keys within
+# each sequence or characters within each string, to better catch re-ordering.
+_TEST_SEQUENCES = {
+    "abc ": (
+        # All key events can be forwarded or committed immediately.
+        (evdev.ecodes.KEY_A,),
+        (evdev.ecodes.KEY_B,),
+        (evdev.ecodes.KEY_C,),
+        (evdev.ecodes.KEY_SPACE,),
+    ),
+    "abc-": (
+        # All key events can be forwarded or committed immediately, avoids any
+        # characters (space) that an input method might treat specially.
+        (evdev.ecodes.KEY_A,),
+        (evdev.ecodes.KEY_B,),
+        (evdev.ecodes.KEY_C,),
+        (evdev.ecodes.KEY_MINUS,),
+    ),
+    "aœc ": (
+        # m17n t-rfc1345, mixes key events that can be forwarded or committed
+        # immediately, and a sequence that has to be committed.
+        (evdev.ecodes.KEY_A,),
+        _AMPERSAND,
+        (evdev.ecodes.KEY_O,),
+        (evdev.ecodes.KEY_E,),
+        (evdev.ecodes.KEY_C,),
+        (evdev.ecodes.KEY_SPACE,),
+    ),
+    "aœc·": (
+        # m17n t-rfc1345, mixes key events that can be forwarded or committed
+        # immediately, and sequences that have to be committed. Avoids space.
+        (evdev.ecodes.KEY_A,),
+        _AMPERSAND,
+        (evdev.ecodes.KEY_O,),
+        (evdev.ecodes.KEY_E,),
+        (evdev.ecodes.KEY_C,),
+        _AMPERSAND,
+        (evdev.ecodes.KEY_DOT,),
+        (evdev.ecodes.KEY_LEFTSHIFT, evdev.ecodes.KEY_M),
+    ),
+    "áœç·": (
+        # m17n t-rfc1345, all sequences have to be committed.
+        _AMPERSAND,
+        (evdev.ecodes.KEY_A,),
+        (evdev.ecodes.KEY_APOSTROPHE,),
+        _AMPERSAND,
+        (evdev.ecodes.KEY_O,),
+        (evdev.ecodes.KEY_E,),
+        _AMPERSAND,
+        (evdev.ecodes.KEY_C,),
+        (evdev.ecodes.KEY_COMMA,),
+        _AMPERSAND,
+        (evdev.ecodes.KEY_DOT,),
+        (evdev.ecodes.KEY_LEFTSHIFT, evdev.ecodes.KEY_M),
+    ),
+}
+
+
+def _press_and_release(ui, *keys, interval):
+    for key in keys:
+        ui.write(evdev.ecodes.EV_KEY, key, 1)
+        ui.syn()
+        time.sleep(interval)
+    for key in reversed(keys):
+        ui.write(evdev.ecodes.EV_KEY, key, 0)
+        ui.syn()
+        time.sleep(interval)
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--interval", type=float, default=0.001)
+    parser.add_argument("--lines", type=int, default=10)
+    parser.add_argument("--words", type=int, default=20)
+    args = parser.parse_args()
+
+    results = {}
+    with evdev.UInput() as ui:
+        for expected_word, key_sequences in _TEST_SEQUENCES.items():
+            time.sleep(0.1)
+            error_lines = 0
+            for line_num in range(args.lines):
+                for word_num in range(args.words):
+                    for key_sequence in key_sequences:
+                        _press_and_release(
+                            ui, *key_sequence, interval=args.interval
+                        )
+                _press_and_release(
+                    ui, evdev.ecodes.KEY_ENTER, interval=args.interval
+                )
+                if sys.stdin.readline() != expected_word * args.words + "\n":
+                    error_lines += 1
+            results[expected_word] = error_lines
+    print(f"Args: {args}")
+    print(f"Error counts: {results}")
+
+
+if __name__ == "__main__":
+    main()
