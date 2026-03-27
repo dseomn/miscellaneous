@@ -152,8 +152,6 @@ media/phonograph/by-speed/45rpm
 media/phonograph/by-speed/78rpm
 media/tape
 media/tape/cassette
-meta/missing-added # missing an added/YYYY/MM/DD tag
-meta/missing-replaygain
 mood/hauntingly-beautiful
 performance/instrument
 performance/instrument/X # X is a type of instrument
