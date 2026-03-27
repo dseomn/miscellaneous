@@ -19,8 +19,8 @@ context/hidden-track/unlisted
 context/sound-effect
 context/soundtrack
 dance/by-extra/calls # the recording has calls (e.g., for a contra or square)
-dance/by-extra/long-intro # there's a lot of audio (potentially including silence) before the dance starts
-dance/by-extra/long-outro # there's a lot of audio (potentially including silence) after the dance ends
+dance/by-extra/long-intro # there's 30s+ of audio (potentially including silence) before the dance starts
+dance/by-extra/long-outro # there's 30s+ of audio (potentially including silence) after the dance ends
 dance/by-formation/circle # groups (individual/couple/triad) are arranged in a circle. e.g., La Bastrangue, many waltz mixers
 dance/by-formation/line # groups arranged in a line
 dance/by-formation/none # groups dance wherever, e.g., waltz or swing
